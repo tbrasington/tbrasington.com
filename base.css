@@ -130,6 +130,10 @@ a {
 
 @media (min-width: 1200px) {
 	
+	.logo {
+		min-height: 500px;
+	}
+	
 	.text-block {
 		width: 40%;
 		margin-left: 30%;
@@ -143,6 +147,14 @@ a {
 }
 
 
-@media (min-width: 1920px) {
+@media (min-width: 1890px) {
 
+	.text-block {
+		width: 40%;
+		margin-left: 30%;
+	}
+	p, ul li { 
+		font-size: 21px;
+		line-height: 34px;
+	}
 }
