@@ -40,7 +40,7 @@ input, textarea {
 	height: auto;
 }
 
-.span-100 { 
+.span-100, .text-block { 
 	width: 100%;
 	padding: 36px 9px;
 }
@@ -81,22 +81,60 @@ a {
 	color: #000;
 	text-decoration: none;
 }
+
 @media (min-width: 480px) {
 	
 }
 
+
+@media (min-width: 516px) {
+	
+	.text-block {
+		width: 80%;
+		margin-left: 10%;
+	}
+}
+
+
 @media (min-width: 768px) {
 	
+	p, ul li { 
+		font-size: 16px;
+		line-height: 22px;
+	}
+	
+	.text-block {
+		width: 70%;
+		margin-left: 15%;
+	}
 }
 
 
 @media (min-width: 1024px) {
 
+	.logo {
+	
+		background-image: url("asset/tbrasington-full-logo.svg");
+		background-size: 60%;
+		height: 60%;
+		min-height: 300px;
+	}
+
+	.text-block {
+		width: 50%;
+		margin-left: 25%;
+	}
+
 }
 
 
-@media (min-width: 1280px) {
-
+@media (min-width: 1200px) {
+	
+	.text-block {
+		width: 40%;
+		margin-left: 30%;
+	}
+	
 }
 
 
