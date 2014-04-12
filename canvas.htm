@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Thomas Brasington</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width = device-width, initial-scale = 1.0 ,  minimum-scale = 1.0,  maximum-scale=1.0">
+
+<link href="base.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+
+
+<div class="col span-100" id="header">
+	
+	
+		
+</div>
+
+
+
+<script type="text/javascript">
+/*
+
+	Google analytics
+
+*/
+
+
+document.addEventListener("DOMContentLoaded", function() {
+   
+	var header = document.getElementById("header");
+	var canvas = document.createElement("canvas");
+	
+
+	canvas.width = 524;
+	canvas.height = 524;
+	
+ 
+	header.appendChild(canvas);
+	var ctx = canvas.getContext('2d');
+
+	var assets = ["asset/tbrasington-small-logo@2x.png", "images/instagram.png" ];
+	
+	var loaded_assets = [];
+	
+	var images_loaded = 0;
+	
+	for(var a =0, length = assets.length; a < length; a++) {
+		
+		loaded_assets[a] = new Image();
+		loaded_assets[a].onload = function(evt) {
+			
+			images_loaded++;
+			
+			if(images_loaded>=length) { render_canvas(); }
+		};
+		
+		loaded_assets[a].src = assets[a];
+	}
+	
+	
+	function render_canvas() {
+		//ctx.save();
+
+        // draw the overlay
+        ctx.drawImage(loaded_assets[1],0,0 );
+
+        // change composite mode to source-in
+        // any new drawing will only overwrite existing pixels
+		//ctx.globalCompositeOperation="source-in";
+
+        // draw a purple rectangle the size of the canvas
+        // Only the overlay will become purple
+     //   ctx.fillStyle=newColor;
+      //  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // change the composite mode to destination-atop
+        // any new drawing will not overwrite any existing pixels
+        ctx.globalCompositeOperation="destination-atop";
+
+        // draw the full logo
+        // This will NOT overwrite any existing purple overlay pixels
+		ctx.drawImage(loaded_assets[0],262,262);
+
+        // draw the truck
+        // This will NOT replace any existing pixels
+        // The purple overlay will not be overwritten
+        // The blue logo will not be overwritten
+//         ctx.drawImage(loaded_assets[1],0,0); 
+
+        // restore the context to it's original state
+        ctx.restore();
+	}
+});
+</script>
+
+</body>
+</html>
