@@ -47,13 +47,17 @@ input, textarea {
 
 .logo {
 
-	background-image: url("asset/tbrasington-small-logo.svg");
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-size: contain;
 	height: 60%;
 	min-height: 300px;
+	padding: 0;
+	overflow: hidden;
 }
+	#masthead img {
+		width: 100%;
+		position: absolute;
+		top:0;
+		margin-top:-50%;
+	}
 
 p { 
 	margin: 0 0 18px 0;
@@ -106,6 +110,15 @@ a {
 	.text-block {
 		width: 70%;
 		margin-left: 15%;
+	}
+}
+
+
+@media (min-width: 900px) {
+	 
+	.text-block {
+		width: 65%;
+		margin-left: 17.5%;
 	}
 }
 

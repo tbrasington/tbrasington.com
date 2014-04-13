@@ -13,12 +13,12 @@
 </head>
 <body>
 
+<div class="col span-100 logo" id="masthead"></div>
 
 <div class="col span-100">
 	
 	
-	<div class="col span-100 logo"></div>
-	
+		
 	<div class="col text-block ">
 		<p>For many people electronic screens have already supplanted paper as the primary medium for gathering and absorbing information. This trend will only accelerate. That's a challenge for designers, for whom the hard-learned lessons of print are often not easily left behind.</p>
 		<p>Some of those lessons still matter, some don’t. I’ve been trained in classic graphic design disciplines, but I’ve grown up with screens. I taught myself core web programming skills before I left school, and in the last nine years have been investigating rigorously how design really works in digital environments.</p>
@@ -55,7 +55,41 @@ ga('create', 'UA-7877840-9', 'tbrasington.com');
 ga('send', 'pageview');
 
 document.addEventListener("DOMContentLoaded", function() {
-   
+      
+	var masthead = document.getElementById("masthead");
+ 
+	var assets = ["images/instagram.png" ];
+	
+	var loaded_assets = [];
+	
+	var images_loaded = 0;
+	
+	for(var a =0, length = assets.length; a < length; a++) {
+		
+		loaded_assets[a] = new Image();
+		loaded_assets[a].onload = function(evt) {
+			
+			images_loaded++;
+			
+			if(images_loaded>=length) { 
+				
+				render_asset(loaded_assets[0]);	
+			}
+			
+		};
+		
+		loaded_assets[a].src = assets[a];
+	}
+	
+	
+	function render_asset(image) {
+		
+		masthead.appendChild(image);
+		
+	}
+	
+	
+	
  
 });
 </script>
