@@ -83,9 +83,125 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	
 	function render_asset(image) {
+		 
 		
-		masthead.appendChild(image);
+	}
+	
+	// masthead
+	var masthead_size = masthead.getBoundingClientRect();
+	
+	// create canvas
+	var canvas = document.createElement("canvas");
+	masthead.appendChild(canvas);
+	
+	// canvas context
+	var context = canvas.getContext('2d');
+	
+	// define the logo resources
+	var logo_resources = {
+		"small": {
+			"file" : "asset/tbrasington-small-logo.svg",
+			"loaded" : false,
+			"element" : null
+		},
+		"full" : {
+			"file" : "asset/tbrasington-full-logo.svg",
+			"loaded" : false,
+			"element" : null
+		}
+	};
+	
+	// size the canvas
+	sizing();
+	
+	window.addEventListener("resize", sizing);
+	
+	
+	function draw_logo() {
 		
+		// What kind of file do we need?
+		// the small one
+		if(masthead_size.width < 1024 && logo_resources.small.loaded === false) {
+			
+			logo_resources.small.element = new Image();
+			logo_resources.small.element.onload = function() { 
+				
+				logo_resources.small.loaded = true;
+				logo_resources.small.width = logo_resources.small.element.naturalWidth;
+				logo_resources.small.height = logo_resources.small.element.naturalHeight;
+				logo_resources.small.ratio = logo_resources.small.height/logo_resources.small.width;
+				// run this again
+				draw_logo();
+			}
+			
+			logo_resources.small.element.src = logo_resources.small.file;
+			
+		// need the full logo
+		} else if(masthead_size.width >= 1024 && logo_resources.full.loaded === false) {
+			
+				logo_resources.full.element = new Image();
+				logo_resources.full.element.onload = function() { 
+				
+				logo_resources.full.loaded = true;
+				logo_resources.full.width = logo_resources.full.element.naturalWidth;
+				logo_resources.full.height = logo_resources.full.element.naturalHeight;
+				logo_resources.full.ratio = logo_resources.full.height/logo_resources.full.width;
+				// run this again
+				draw_logo();
+			}
+			
+			logo_resources.full.element.src = logo_resources.full.file;
+		}
+		
+		// save contenxt
+		context.save();
+			
+		// we need the small logo
+		if(masthead_size.width < 1024 && logo_resources.small.loaded) {
+			
+			logo_rendering("small");
+		}
+			
+		// we need the small logo
+		else if(masthead_size.width >= 1024 && logo_resources.full.loaded) {
+			
+			logo_rendering("full");
+		}
+		
+		
+		
+	}
+	
+	function logo_rendering(logo) {
+		
+		var size = logo;
+		var logo = logo_resources[size];
+		
+		if(size==="small") {
+			
+			var new_logo_width = masthead_size.height * 0.8;
+			var new_logo_height = new_logo_width*logo.ratio;
+		
+		} else if(size==="full") {
+			
+			new_logo_width = masthead_size.width * 0.8;
+			new_logo_height = new_logo_width*logo.ratio;		
+		}
+		
+		var logo_position_x = (masthead_size.width-new_logo_width)/2 ;
+		var logo_position_y = (masthead_size.height-new_logo_height)/2 ;
+		
+		context.drawImage(logo.element,logo_position_x,logo_position_y, new_logo_width,new_logo_height);
+	}
+	
+	function sizing () {
+		masthead_size = masthead.getBoundingClientRect();
+		canvas.width = masthead_size.width;
+		canvas.height = masthead_size.height;
+		
+		
+		// draw the logo 
+		draw_logo();
 	}
 	
 	
