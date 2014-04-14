@@ -45,6 +45,7 @@ input, textarea {
 	padding: 36px 9px;
 }
 
+.text-block { padding: 0 9px; }
 .logo {
 
 	height: 60%;
