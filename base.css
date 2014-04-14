@@ -57,6 +57,7 @@ input, textarea {
 	background-position: center center;
 	background-size: 200%;
 	cursor: pointer;
+	opacity: 0.9;
 }
 
 
