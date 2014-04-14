@@ -54,68 +54,74 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-7877840-9', 'tbrasington.com');
 ga('send', 'pageview');
 
+
+// define the logo resources
+var logo_resources = {
+	"small": {
+		"file" : "asset/tbrasington-small-logo.svg",
+		"loaded" : false,
+		"element" : null
+	},
+	"full" : {
+		"file" : "asset/tbrasington-full-logo.svg",
+		"loaded" : false,
+		"element" : null
+	}
+};
+
+// are the instagram assets ready
+var instagram_ready = false;
+var loaded_assets = [];
+var images_loaded = 0;
+
+// masthead
+var masthead;
+	
+// masthead size
+var masthead_size;
+
+// masthead lnik
+var masthead_link = "http://instgram.com/tbrasington";
+
+// create canvas
+var canvas; 
+
+// canvas context
+var context;
+	
 document.addEventListener("DOMContentLoaded", function() {
       
-	var masthead = document.getElementById("masthead");
- 
-	var assets = ["images/instagram.png" ];
+	masthead = document.getElementById("masthead");
+ 	
+	masthead_size = masthead.getBoundingClientRect();
 	
-	var loaded_assets = [];
-	
-	var images_loaded = 0;
-	
-	for(var a =0, length = assets.length; a < length; a++) {
-		
-		loaded_assets[a] = new Image();
-		loaded_assets[a].onload = function(evt) {
-			
-			images_loaded++;
-			
-			if(images_loaded>=length) { 
-				
-				render_asset(loaded_assets[0]);	
-			}
-			
-		};
-		
-		loaded_assets[a].src = assets[a];
-	}
-	
-	
-	function render_asset(image) {
-		 
-		
-	}
-	
-	// masthead
-	var masthead_size = masthead.getBoundingClientRect();
-	
-	// create canvas
-	var canvas = document.createElement("canvas");
+	canvas = document.createElement("canvas");
 	masthead.appendChild(canvas);
 	
-	// canvas context
-	var context = canvas.getContext('2d');
-	
-	// define the logo resources
-	var logo_resources = {
-		"small": {
-			"file" : "asset/tbrasington-small-logo.svg",
-			"loaded" : false,
-			"element" : null
-		},
-		"full" : {
-			"file" : "asset/tbrasington-full-logo.svg",
-			"loaded" : false,
-			"element" : null
-		}
-	};
+	context = canvas.getContext('2d');
 	
 	// size the canvas
 	sizing();
 	
+	// events
+	canvas.addEventListener("click", function(evt){
+		
+		window.open(masthead_link);
+		
+	});
+	
 	window.addEventListener("resize", sizing);
 	
+	
+	var instagram_data = document.createElement("script");
+		instagram_data.setAttribute("type","text/javascript");
+		instagram_data.src =  "https://api.instagram.com/v1/users/1806570/media/recent/?client_id=bff077aba94e40808247768e4e6903f3&callback=load_instagram";
+		document.getElementsByTagName('head')[0].appendChild(instagram_data);
+	
+});
+
+
+
 	
 	function draw_logo() {
 		
@@ -167,9 +173,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 			logo_rendering("full");
 		}
-		
-		
-		
 	}
 	
 	function logo_rendering(logo) {
@@ -192,22 +195,57 @@ document.addEventListener("DOMContentLoaded", function() {
 		var logo_position_y = (masthead_size.height-new_logo_height)/2 ;
 		
 		context.drawImage(logo.element,logo_position_x,logo_position_y, new_logo_width,new_logo_height);
+		
+		if(instagram_ready) {
+			
+			context.save();
+			
+			// draw the full logo
+			context.drawImage(loaded_assets,0,0,masthead_size.width,masthead_size.height);
+			
+			masthead.style.backgroundImage = "url("+loaded_assets.src+")";
+			
+			// change the composite mode to destination-atop
+			// any new drawing will not overwrite any existing pixels
+			context.globalCompositeOperation="destination-atop";
+			
+			
+			context.drawImage(logo.element,logo_position_x,logo_position_y, new_logo_width,new_logo_height);
+			
+			// restore the context to it's original state
+			context.restore();
+		}
 	}
 	
 	function sizing () {
+		
 		masthead_size = masthead.getBoundingClientRect();
 		canvas.width = masthead_size.width;
 		canvas.height = masthead_size.height;
-		
 		
 		// draw the logo 
 		draw_logo();
 	}
 	
+
+
+function load_instagram(response) {
 	
+		var asset = response.data[Math.floor((Math.random()*19)+1)];
+		masthead_link = asset.link;
+		
+		loaded_assets = new Image();
+		loaded_assets.onload = function(evt) {
+			instagram_ready = true;
+			setTimeout(draw_logo,3000);
+		}
+			
+		 		
+		loaded_assets.src = asset.images.standard_resolution.url;
+	}
 	
- 
-});
+
+
 </script>
 
 </body>

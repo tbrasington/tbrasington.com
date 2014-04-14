@@ -46,17 +46,18 @@ input, textarea {
 }
 
 .text-block { padding: 0 9px; }
+
 .logo {
 
 	height: 60%;
 	min-height: 300px;
 	padding: 0;
 	overflow: hidden;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 200%;
 }
-	#masthead img {
-		position: absolute;
-		top:0;
-	}
+
 
 p { 
 	margin: 0 0 18px 0;
@@ -100,6 +101,10 @@ a {
 
 
 @media (min-width: 768px) {
+	
+	.logo {
+		background-size: cover;
+	}
 	
 	p, ul li { 
 		font-size: 16px;
