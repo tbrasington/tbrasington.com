@@ -54,7 +54,15 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-7877840-9', 'tbrasington.com');
 ga('send', 'pageview');
 
-
+// utility
+function does_touch() { 
+	if ("ontouchstart" in window || navigator.msMaxTouchPoints) {
+	    return true;
+	} else {
+	    return false;
+	}
+}
+	
 // define the logo resources
 var logo_resources = {
 	"small": {
@@ -71,6 +79,7 @@ var logo_resources = {
 
 // are the instagram assets ready
 var instagram_ready = false;
+var first_run = true;
 var loaded_assets = [];
 var images_loaded = 0;
 
@@ -88,6 +97,7 @@ var canvas;
 
 // canvas context
 var context;
+
 	
 document.addEventListener("DOMContentLoaded", function() {
       
@@ -110,6 +120,47 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 	});
 	
+	// positions relative to enter
+	var enter_x = 0, enter_y = 0;
+	
+	
+	canvas.addEventListener((does_touch() ? "touchstart" : "mouseenter"), function(evt){
+	
+		enter_x  = (does_touch() ? event.touches[0].pageX : evt.pageX);
+		enter_y  = (does_touch() ? event.touches[0].pageY : evt.pageY);
+	});
+	
+	canvas.addEventListener((does_touch() ? "touchmove" : "mousemove"), function(evt){
+		
+		var x =  enter_x - (does_touch() ? event.changedTouches[0].pageX : evt.pageX), y = enter_y - (does_touch() ? event.changedTouches[0].pageY : evt.pageY);
+	
+		if(x>50 ) {
+			x = 50;
+		}
+		if(x< -50) {
+			x = -50;
+		}
+		if(y>50) {
+			y = 50;
+		}
+		if(y<-50) {
+			y = -50;
+		}
+		
+		// we need the small logo
+		if(masthead_size.width < 1024 && logo_resources.small.loaded) {
+			
+			logo_rendering("small", x, y);
+		}
+			
+		// we need the small logo
+		else if(masthead_size.width >= 1024 && logo_resources.full.loaded) {
+			
+			logo_rendering("full", x, y);
+		}
+		
+	});
+	
 	window.addEventListener("resize", sizing);
 	
 	
@@ -117,6 +168,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		instagram_data.setAttribute("type","text/javascript");
 		instagram_data.src =  "https://api.instagram.com/v1/users/1806570/media/recent/?client_id=bff077aba94e40808247768e4e6903f3&callback=load_instagram";
 		document.getElementsByTagName('head')[0].appendChild(instagram_data);
+		
+		
+		
 	
 });
 
@@ -175,7 +229,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 	
-	function logo_rendering(logo) {
+	function logo_rendering(logo, target_x, target_y) {
+		
+		target_x = target_x || 0;
+		target_y = target_y || 0;
 		
 		var size = logo;
 		var logo = logo_resources[size];
@@ -193,30 +250,36 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 		var logo_position_x = (masthead_size.width-new_logo_width)/2 ;
 		var logo_position_y = (masthead_size.height-new_logo_height)/2 ;
-		
+	
 		context.drawImage(logo.element,logo_position_x,logo_position_y, new_logo_width,new_logo_height);
+
 		
 		if(instagram_ready) {
 			
 			context.save();
 			
 			// draw the full logo
-			context.drawImage(loaded_assets,0,0,masthead_size.width,masthead_size.height);
+			context.drawImage(loaded_assets,target_x,target_y,masthead_size.width,masthead_size.height);
 			
 			masthead.style.backgroundImage = "url("+loaded_assets.src+")";
+			
+			// fade in
+			if(first_run)  {
+				masthead.classList.add("fade-in");
+				first_run = false;	
+			}
 			
 			// change the composite mode to destination-atop
 			// any new drawing will not overwrite any existing pixels
 			context.globalCompositeOperation="destination-atop";
 			
-			
-			context.drawImage(logo.element,logo_position_x,logo_position_y, new_logo_width,new_logo_height);
+			context.drawImage(logo.element,logo_position_x,logo_position_y , new_logo_width,new_logo_height);
 			
 			// restore the context to it's original state
 			context.restore();
 		}
 	}
-	
+
 	function sizing () {
 		
 		masthead_size = masthead.getBoundingClientRect();
@@ -237,7 +300,7 @@ function load_instagram(response) {
 		loaded_assets = new Image();
 		loaded_assets.onload = function(evt) {
 			instagram_ready = true;
-			setTimeout(draw_logo,3000);
+			setTimeout(draw_logo,500);
 		}
 			
 		 		

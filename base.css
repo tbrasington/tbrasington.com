@@ -59,6 +59,67 @@ input, textarea {
 	cursor: pointer;
 	opacity: 0.9;
 }
+ 
+
+.fade-in {
+
+	-o-animation-duration: 0.7s;
+	-o-animation-name: fadein;
+	-o-animation-iteration-count : 1;
+	-o-animation-fill-mode: forwards;  
+	-o-animation-timing-function: ease-in;
+	
+	-moz-animation-duration: 0.7s;
+	-moz-animation-name: fadein;
+	-moz-animation-iteration-count : 1;
+	-moz-animation-fill-mode: forwards;  
+	-moz-animation-timing-function: ease-in;
+	
+	-webkit-animation-duration: 0.7s;
+	-webkit-animation-name: fadein;
+	-webkit-animation-iteration-count : 1;
+	-webkit-animation-fill-mode: forwards;  
+	-webkit-animation-timing-function: ease-in;
+	
+	
+	animation-duration: 0.7s;
+	animation-name: fadein;
+	animation-iteration-count : 1;
+	animation-fill-mode: forwards;  
+	animation-timing-function: ease-in;
+}
+@-o-keyframes fadein {
+	from { 
+		opacity: 0;
+	}
+	to { 
+		opacity: 1;
+	}
+}
+@-moz-keyframes fadein {
+	from { 
+		opacity: 0;
+	}
+	to { 
+		opacity: 1;
+	}
+}
+@-webkit-keyframes fadein {
+	from { 
+		opacity: 0;
+	}
+	to { 
+		opacity: 1;
+	}
+}
+@keyframes fadein {
+	from { 
+		opacity: 0;
+	}
+	to { 
+		opacity: 1;
+	}
+}
 
 
 p { 
