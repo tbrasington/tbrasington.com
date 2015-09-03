@@ -98,6 +98,7 @@ var canvas;
 // canvas context
 var context;
 
+var cache_instagram_data;
 	
 document.addEventListener("DOMContentLoaded", function() {
       
@@ -163,12 +164,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	window.addEventListener("resize", sizing);
 	
-	
-	var instagram_data = document.createElement("script");
+		var instagram_data = document.createElement("script");
 		instagram_data.setAttribute("type","text/javascript");
 		instagram_data.src =  "https://api.instagram.com/v1/users/1806570/media/recent/?client_id=bff077aba94e40808247768e4e6903f3&callback=load_instagram";
 		document.getElementsByTagName('head')[0].appendChild(instagram_data);
-		
+		console.log(instagram_data)
 		
 		
 	
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			context.save();
 			
 			// draw the full logo
-			context.drawImage(loaded_assets,target_x,target_y,masthead_size.width,masthead_size.height);
+context.drawImage(loaded_assets,target_x,target_y,masthead_size.width,masthead_size.height);
 			
 			masthead.style.backgroundImage = "url("+loaded_assets.src+")";
 			
@@ -277,8 +277,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 			// restore the context to it's original state
 			context.restore();
+			
+			}
+			
 		}
-	}
 
 	function sizing () {
 		
@@ -294,6 +296,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function load_instagram(response) {
 	
+		cache_instagram_data = response.data;
+		
 		var asset = response.data[Math.floor((Math.random()*19)+1)];
 		masthead_link = asset.link;
 		
@@ -306,6 +310,24 @@ function load_instagram(response) {
 		 		
 		loaded_assets.src = asset.images.low_resolution.url;
 	}
+	
+	setInterval(function() { 
+
+
+		var asset = cache_instagram_data[Math.floor((Math.random()*19)+1)];
+		masthead_link = asset.link;
+		
+		loaded_assets = new Image();
+		loaded_assets.onload = function(evt) {
+			instagram_ready = true;
+			setTimeout(draw_logo,500);
+		}
+			
+		 		
+		loaded_assets.src = asset.images.low_resolution.url;	
+
+		
+	}, 10000)
 	
 
 
